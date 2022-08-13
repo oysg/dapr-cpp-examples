@@ -7,6 +7,10 @@ HELLOWORLD_DIR=$HOME_DIR/helloworld_app
 CLIENT_DIR=$HOME_DIR/client_app
 LOGS_DIR=$HOME_DIR/logs
 
+cd $HOME_DIR
+
+make clean && make
+
 echo $HOME_DIR
 echo "Start All Service.........." | tee $LOGS_DIR/dapr.log
 
