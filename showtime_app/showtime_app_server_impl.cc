@@ -65,9 +65,11 @@ Status ShowtimeAppServerImpl::OnInvoke(
    // 把 now 转换为字符串形式
    char* dt = ctime(&now);
    std::string strTime = dt;
+   std::cout << "strTime:" << strTime << std::endl;
    response->mutable_data()->set_value(strTime);
+  std::cout << "strTime:" << strTime << std::endl;
 
-  PublishEvent();
+  //PublishEvent();
   return Status::OK;
 }
 

@@ -130,7 +130,7 @@ int main(int argc, char** argv) {
 
   //get time
   response = app->CallMethod(showtime_app, "showtime", "This is showtime client.");
-  std::cout << showtime_app << ">>Time:" << response << std::endl;
+  std::cout << showtime_app << ">>response:Time:" << response << std::endl;
 
   // Wait until server is down
   app->WaitUntilServerIsDown();
