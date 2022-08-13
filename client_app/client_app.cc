@@ -2,6 +2,7 @@
 // My Test || client
 // ------------------------------------------------------------------------
 
+#include <stdio.h>
 #include <cstdlib>
 #include <iostream>
 #include <memory>
@@ -128,9 +129,15 @@ int main(int argc, char** argv) {
   std::string response = app->CallMethod(helloworld_app, "helloworld", "This is helloworld client.");
   std::cout << helloworld_app << ">>response:" << response << std::endl;
 
-  //get time
-  response = app->CallMethod(showtime_app, "showtime", "This is showtime client.");
-  std::cout << showtime_app << ">>response:Time:" << response << std::endl;
+  //showtime
+  while (true)
+  {
+    response = app->CallMethod(showtime_app, "showtime", "This is showtime client.");
+    //std::cout << showtime_app << ">>response:Time:" << response << "\033[1A" << std::endl;
+    printf("%s>>response:Time:%s\033[1A", showtime_app.c_str(), response.c_str());
+    //std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+  }
+  
 
   // Wait until server is down
   app->WaitUntilServerIsDown();

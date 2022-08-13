@@ -30,7 +30,7 @@ namespace dapr_cpp_showtime_example {
 const std::string PUBSUB_NAME = "pubsub";
 const std::string TOPIC_NAME = "monitoring";
 
-void ShowtimeAppServerImpl::SetClientStub(std::shared_ptr<Dapr::Stub> client) {
+void ShowtimeAppServerImpl::SetClientStub(std::shared_ptr<Dapr::Stub>& client) {
   client_stub_ = client;
 }
 
@@ -69,7 +69,7 @@ Status ShowtimeAppServerImpl::OnInvoke(
    response->mutable_data()->set_value(strTime);
   std::cout << "strTime:" << strTime << std::endl;
 
-  //PublishEvent();
+  PublishEvent();
   return Status::OK;
 }
 

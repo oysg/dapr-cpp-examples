@@ -39,7 +39,7 @@ class ShowtimeAppServerImpl final : public AppCallback::Service {
     Status OnBindingEvent(ServerContext* context, const BindingEventRequest* request, BindingEventResponse* response) override;
     Status OnTopicEvent(ServerContext* context, const TopicEventRequest* request, TopicEventResponse* response) override;
 
-    void SetClientStub(std::shared_ptr<Dapr::Stub> client);
+    void SetClientStub(std::shared_ptr<Dapr::Stub>& client);
     std::string PublishEvent();
   private:
     std::shared_ptr<Dapr::Stub> client_stub_;

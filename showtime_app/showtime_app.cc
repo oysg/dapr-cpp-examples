@@ -43,6 +43,7 @@ class ShowtimeApp {
       // Connect to dapr grpc server.
       std::cout << "Connecting to " << dapr_grpc_endpoint() << "..." << std::endl;
       client_stub_ = Dapr::NewStub(grpc::CreateChannel(dapr_grpc_endpoint(), grpc::InsecureChannelCredentials()));
+      service_->SetClientStub(client_stub_);
     }
 
     std::string CallMethod(
@@ -75,7 +76,6 @@ class ShowtimeApp {
     }
 
     void StartAppServer() {
-      ConnectToDapr();
       std::string endpoint = showtime_app_endpoint();
       service_ = std::shared_ptr<ShowtimeAppServerImpl>(new ShowtimeAppServerImpl());
 
