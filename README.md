@@ -21,10 +21,10 @@ dapr run --app-id monitoring_app --components-path ../components/ --dapr-http-po
 
 2.使用dapr调用monitoring服务
 
- 保存状态
+  保存状态
 
-curl -X POST -H "Content-Type: application/json" -d '[{ "key": "name", "value": "Bruce Wayne"}]' http://localhost:6500/v1.0/state/statestore
+  curl -X POST -H "Content-Type: application/json" -d '[{ "key": "name", "value": "Bruce Wayne"}]' http://localhost:6500/v1.0/state/statestore
 
- 获取状态
+  获取状态
 
-curl http://localhost:6500/v1.0/state/statestore/name
+  curl http://localhost:6500/v1.0/state/statestore/name
