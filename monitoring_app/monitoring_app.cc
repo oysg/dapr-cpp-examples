@@ -19,6 +19,8 @@ using dapr::proto::runtime::v1::Dapr;
 using dapr::proto::runtime::v1::InvokeServiceRequest;
 using dapr::proto::common::v1::InvokeRequest;
 using dapr::proto::common::v1::InvokeResponse;
+using dapr::proto::runtime::v1::SaveStateRequest;
+using dapr::proto::common::v1::StateItem;
 
 using grpc::Channel;
 using grpc::ClientContext;
@@ -27,6 +29,7 @@ using grpc::Status;
 using grpc::Server;
 
 using google::protobuf::Any;
+using google::protobuf::Empty;
 
 namespace dapr_cpp_monitoring_example {
 
@@ -39,6 +42,32 @@ class MonitoringApp {
       // Connect to dapr grpc server.
       std::cout << "Connecting to " << dapr_grpc_endpoint() << "..." << std::endl;
       client_stub_ = Dapr::NewStub(grpc::CreateChannel(dapr_grpc_endpoint(), grpc::InsecureChannelCredentials()));
+    }
+
+    std::string SaveState(
+      const std::string strStoreName, const std::string strKey,
+      const std::string strValue) {
+      ClientContext context;
+      SaveStateRequest request;
+      Empty response;
+
+      // Construct service invocation request
+      //request.set_id(app_id);
+      //request.mutable_message()->set_method(method);
+      //request.mutable_message()->mutable_data()->set_value(message.c_str());
+      StateItem *stateItem = request.add_states();
+      request.set_store_name(strStoreName);
+      stateItem->set_key(strKey);
+      stateItem->set_value(strValue);
+
+      // Call InvokeService
+      Status status = client_stub_->SaveState(&context, request, &response);
+
+      if (status.ok()) {
+        return "SaveState Successful";
+      }
+
+      return "RPC Error : " + status.error_message() + ", " + status.error_details();
     }
 
     std::string CallMethod(
@@ -122,9 +151,9 @@ int main(int argc, char** argv) {
   app->StartAppServer();
   std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
-  //app->ConnectToDapr();
+  app->ConnectToDapr();
+  std::cout << app->SaveState("statestore", "name", "zhangsan") << std::endl;
   // Wait until server is down
- 
   app->WaitUntilServerIsDown();
 
   return 0;

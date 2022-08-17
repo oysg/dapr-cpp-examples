@@ -20,6 +20,8 @@ using dapr::proto::runtime::v1::Dapr;
 using dapr::proto::runtime::v1::InvokeServiceRequest;
 using dapr::proto::common::v1::InvokeRequest;
 using dapr::proto::common::v1::InvokeResponse;
+using dapr::proto::runtime::v1::GetStateRequest;
+using dapr::proto::runtime::v1::GetStateResponse;
 
 using grpc::Channel;
 using grpc::ClientContext;
@@ -40,6 +42,26 @@ class ClientApp {
       // Connect to dapr grpc server.
       std::cout << "Connecting to " << dapr_grpc_endpoint() << "..." << std::endl;
       client_stub_ = Dapr::NewStub(grpc::CreateChannel(dapr_grpc_endpoint(), grpc::InsecureChannelCredentials()));
+    }
+
+    std::string GetState(
+      const std::string strStoreName, const std::string strKey) {
+      ClientContext context;
+      GetStateRequest request;
+      GetStateResponse response;
+
+      // Construct service invocation request
+      request.set_store_name(strStoreName);
+      request.set_key(strKey);
+
+      // Call InvokeService
+      Status status = client_stub_->GetState(&context, request, &response);
+
+      if (status.ok()) {
+        return *response.mutable_data();
+      }
+
+      return "RPC Error : " + status.error_message() + ", " + status.error_details();
     }
 
     std::string CallMethod(
@@ -128,6 +150,9 @@ int main(int argc, char** argv) {
   //test helloworld Invoke
   std::string response = app->CallMethod(helloworld_app, "helloworld", "This is helloworld client.");
   std::cout << helloworld_app << ">>response:" << response << std::endl;
+
+  std::string strState = app->GetState("statestore", "name");
+  std::cout << "GetState:Name:" << strState << std::endl;
 
   //showtime
   while (true)
